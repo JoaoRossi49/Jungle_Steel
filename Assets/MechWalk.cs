@@ -4,36 +4,59 @@ using UnityEngine;
 
 public class MechWalk : MonoBehaviour
 {
+    CharacterController controller;
     private Animator anim;
-    public float stillRotationSpeed = 0.0025f;
-    public float walkingRotationSpeed = 0.005f;
-    public float speed = 10.0f;
-    // Start is called before the first frame update
+
+    Vector3 forward;
+    Vector3 strafe;
+    Vector3 vertical;
+
+    float forwardSpeed = 5f;
+    float strafeSpeed = 5f;
+
+    float gravity;
+    float jumpSpeed;
+    float maxJumpHeight = 2f;
+    float timeToMaxHeight = 0.5f;
+
     void Start()
     {
         anim = GetComponent<Animator>();
+        controller = GetComponent<CharacterController>();
+
+        gravity = (-2 * maxJumpHeight) / (timeToMaxHeight * timeToMaxHeight);
+        jumpSpeed = (2 * maxJumpHeight) / timeToMaxHeight;
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        //Controladores para estado de animação
-        float h = Input.GetAxis("Horizontal");
-        anim.SetFloat(name:"Direction",h);
-        float v = Input.GetAxis("Vertical");
-        anim.SetFloat(name:"Speed",v);
+        float forwardInput = Input.GetAxisRaw("Vertical");
+        float strafeInput = Input.GetAxisRaw("Horizontal");
 
-        //Roda no próprio eixo
-        if(v!=0){
-            transform.Rotate(0, h*walkingRotationSpeed, 0);
-        }else{
-            transform.Translate(h*stillRotationSpeed,0,0);
-        };
-
-        //Caminha para frente ou para trás
-        float translation = Input.GetAxis("Vertical") * speed;
-        transform.Translate(0, 0, translation);
-
+        forward = forwardInput * forwardSpeed * transform.forward;
+        strafe = strafeInput * strafeSpeed * transform.right;
         
+        vertical += gravity * Time.deltaTime * Vector3.up;
+
+        if(controller.isGrounded){
+            vertical = Vector3.down;
+        }
+
+        if(Input.GetKeyDown(KeyCode.Space)){
+            vertical = jumpSpeed * Vector3.up;
+        }
+
+        //Validação para caso o player esbarre no teto, sua velocidade de subida seja zerada.
+        if (vertical.y > 0 && (controller.collisionFlags & CollisionFlags.Above) != 0){
+            vertical = Vector3.zero;
+        }
+
+        Vector3 finalVelocity = forward + strafe + vertical;
+        controller.Move(finalVelocity * Time.deltaTime);
+
+        anim.SetFloat(name:"Direction", strafeInput);
+        anim.SetFloat(name:"Speed", forwardInput);
     }
 }
