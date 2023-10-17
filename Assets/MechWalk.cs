@@ -19,6 +19,9 @@ public class MechWalk : MonoBehaviour
     float maxJumpHeight = 2f;
     float timeToMaxHeight = 0.5f;
 
+    [SerializeField] private AudioSource passosAudioSource;
+    [SerializeField] private AudioClip[] passosAudioClip;
+
     void Start()
     {
         anim = GetComponent<Animator>();
@@ -58,5 +61,8 @@ public class MechWalk : MonoBehaviour
 
         anim.SetFloat(name:"Direction", strafeInput);
         anim.SetFloat(name:"Speed", forwardInput);
+    }
+    private void Passos(){
+        passosAudioSource.PlayOneShot(passosAudioClip[0]);
     }
 }
