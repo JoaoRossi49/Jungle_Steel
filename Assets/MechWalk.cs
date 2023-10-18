@@ -59,6 +59,7 @@ public class MechWalk : MonoBehaviour
         Vector3 finalVelocity = forward + strafe + vertical;
         controller.Move(finalVelocity * Time.deltaTime);
 
+        //anim.SetFloat(name:"jumpSpeed", vertical);
         anim.SetFloat(name:"Direction", strafeInput);
         anim.SetFloat(name:"Speed", forwardInput);
     }
