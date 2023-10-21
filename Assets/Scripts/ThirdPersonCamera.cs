@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FirstPersonCamera : MonoBehaviour
+public class ThirdPersonCamera : MonoBehaviour
 {
     public Transform characterBody;
     public Transform characterHead;
@@ -20,7 +20,8 @@ public class FirstPersonCamera : MonoBehaviour
     float smoothCoefx = 0.005f;
     float smoothCoefy = 0.005f;
 
-
+    public Vector3 GetForwardDirection() => transform.forward;
+    public Vector3 GetPosition() => characterHead.position;
 
     void Start()
     {
