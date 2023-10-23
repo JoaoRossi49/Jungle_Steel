@@ -1,12 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class MechWalk : MonoBehaviour
 {
+    //Gerenciamento de vida
+    public int maxHealth = 100;
+    public int currentHealth;
+    public HealthBar healthBar;
+    //Animações
     CharacterController controller;
     private Animator anim;
 
+
+    //Movimentação
     Vector3 forward;
     Vector3 strafe;
     Vector3 vertical;
@@ -19,11 +28,18 @@ public class MechWalk : MonoBehaviour
     float maxJumpHeight = 2f;
     float timeToMaxHeight = 0.5f;
 
+
+    //Audios e Audio Source
     [SerializeField] private AudioSource passosAudioSource;
     [SerializeField] private AudioClip[] passosAudioClip;
+    [SerializeField] private AudioClip[] jumpAudioClip;
+    [SerializeField] private AudioClip[] jetAudioClip;
 
     void Start()
     {
+        currentHealth = maxHealth;
+        healthBar.SetMaxHealth(maxHealth);
+
         anim = GetComponent<Animator>();
         controller = GetComponent<CharacterController>();
 
@@ -59,11 +75,29 @@ public class MechWalk : MonoBehaviour
         Vector3 finalVelocity = forward + strafe + vertical;
         controller.Move(finalVelocity * Time.deltaTime);
 
-        //anim.SetFloat(name:"jumpSpeed", vertical);
+        //controladores utilizados para animações
+        anim.SetFloat(name:"jumpSpeed", GetComponent<Rigidbody>().velocity.y);
         anim.SetFloat(name:"Direction", strafeInput);
         anim.SetFloat(name:"Speed", forwardInput);
+
+        if(Input.GetKeyDown(KeyCode.E)){
+            TakeDamage(10);
+        }
+
+        if(currentHealth == 0){
+            Application.LoadLevel(Application.loadedLevel);
+        }
+
+
     }
     private void Passos(){
         passosAudioSource.PlayOneShot(passosAudioClip[0]);
+    }
+    private void Jet(){
+        passosAudioSource.PlayOneShot(jetAudioClip[0]);
+    }
+    void TakeDamage(int damage){
+        currentHealth -= damage;
+        healthBar.SetHealth(currentHealth);
     }
 }
