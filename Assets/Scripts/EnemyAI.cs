@@ -25,7 +25,6 @@ public class EnemyAI : MonoBehaviour
     public float sightRange, attackRange;
     public bool playerInSightRange, playerInAttackRange;
 
-
     private void Awake(){
         player = GameObject.Find("PlayerMech").transform;
         agent = GetComponent<NavMeshAgent>();
@@ -70,11 +69,11 @@ public class EnemyAI : MonoBehaviour
     private void AttackPlayer(){
         agent.SetDestination(transform.position);
 
-        transform.LookAt(player);
+        transform.LookAt(new Vector3(player.transform.position.x,20,player.transform.position.z));
 
         if(!alreadyAttacked){
             Rigidbody rb = Instantiate(projectile, transform.position, Quaternion.identity).GetComponent<Rigidbody>();
-            rb.AddForce(transform.forward * 32f, ForceMode.Impulse);
+            rb.AddForce(transform.forward * 150f, ForceMode.Impulse);
             rb.AddForce(transform.up * 8f, ForceMode.Impulse);
             alreadyAttacked = true;
             Invoke(nameof(ResetAttack), timeBetweenAttacks);
@@ -83,7 +82,7 @@ public class EnemyAI : MonoBehaviour
     private void ResetAttack(){
         alreadyAttacked = false;
     }
-    private void TakeDamage(int damage){
+    public void TakeDamage(int damage){
         health -= damage;
         if (health <=0) Invoke(nameof(DestroyEnemy), .5f);
     }

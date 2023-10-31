@@ -5,11 +5,12 @@ using UnityEngine;
 public class Bullet : MonoBehaviour
 {
     Vector3 velocity;
-    float speed = 60;
+    float speed = 140;
     Transform player;
     void Start()
     {
       player = GameObject.Find("PlayerMech").transform;
+      transform.LookAt(player);
     }
     void Update()
     {

@@ -14,7 +14,7 @@ public class MechWalk : MonoBehaviour
     CharacterController controller;
     private Animator anim;
 
-
+                                   
     //Movimentação
     Vector3 forward;
     Vector3 strafe;
@@ -27,6 +27,8 @@ public class MechWalk : MonoBehaviour
     float jumpSpeed;
     float maxJumpHeight = 2f;
     float timeToMaxHeight = 0.5f;
+    float jumping;
+    float groundChekDistance;
 
 
     //Audios e Audio Source
@@ -63,7 +65,7 @@ public class MechWalk : MonoBehaviour
             vertical = Vector3.down;
         }
 
-        if(Input.GetKeyDown(KeyCode.Space)){
+        if(Input.GetKeyDown(KeyCode.Space) && jumping < 5.0f){
             vertical = jumpSpeed * Vector3.up;
         }
 
@@ -76,7 +78,7 @@ public class MechWalk : MonoBehaviour
         controller.Move(finalVelocity * Time.deltaTime);
 
         //controladores utilizados para animações
-        anim.SetFloat(name:"jumpSpeed", GetComponent<Rigidbody>().velocity.y);
+        anim.SetFloat(name:"jumping", jumping);
         anim.SetFloat(name:"Direction", strafeInput);
         anim.SetFloat(name:"Speed", forwardInput);
 
@@ -86,6 +88,14 @@ public class MechWalk : MonoBehaviour
 
         if(currentHealth == 0){
             Application.LoadLevel(Application.loadedLevel);
+        }
+
+        groundChekDistance = (controller.height/2) + 0.1f;
+        RaycastHit hit;
+        if(Physics.Raycast(transform.position, -transform.up, out hit, groundChekDistance)){
+            jumping = 1 + hit.distance;
+        }else{
+            jumping = 0 + hit.distance;
         }
 
 

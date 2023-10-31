@@ -52,12 +52,12 @@ public class Gun : MonoBehaviour {
 
     void ShootRaycast() {
         RaycastHit hitInfo;
-        if(Physics.Raycast(tpsCam.transform.position, tpsCam.transform.forward, out hitInfo, Mathf.Infinity, LayerMask.GetMask("hitteble"))) {
-            IShotHit hitted = hitInfo.transform.GetComponent<IShotHit>();
-            if(hitted != null) {
-                Debug.Log("Acertou");
-                hitted.Hit(tpsCam.transform.forward);
-                Debug.DrawLine(transform.position, hitInfo.point, Color.red);
+        if(Physics.Raycast(tpsCam.transform.position, tpsCam.transform.forward, out hitInfo, Mathf.Infinity, LayerMask.GetMask("hittable"))) {
+            EnemyAI enemy = hitInfo.transform.GetComponent<EnemyAI>();
+            Debug.Log(hitInfo.collider.gameObject.name);
+            if(enemy != null) {
+                Debug.Log("Acertou um tanque");
+                enemy.TakeDamage(10);
             }
         }
     }
