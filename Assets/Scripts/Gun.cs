@@ -3,8 +3,6 @@
 
 public class Gun : MonoBehaviour {
 
-    //public Transform bulletPrefab;
-
     Animator    animator;
     AudioSource audioSource;
 
@@ -19,8 +17,6 @@ public class Gun : MonoBehaviour {
     [SerializeField] private AudioClip[] GunAudioClip;
 
     private void Awake() {
-
-        //animator    = transform.Find(gunName).GetComponent<Animator>();
 
         tpsCam     = transform.Find("shotSpawn");
         shotSpawn  = transform.Find("shotSpawn");
@@ -37,11 +33,7 @@ public class Gun : MonoBehaviour {
     void Update() {
         
         if(Input.GetKeyDown(KeyCode.Mouse0)) {
-
-            //animator.Play("Shoot", -1, 0);
-
             GunAudioSource.PlayOneShot(GunAudioClip[0]);
-
             shootEffects.MuzzleFlash(shotSpawn.position, shotSpawn.rotation);
             shootEffects.Shell(shellSpawn.position, shellSpawn.rotation);
             ShootRaycast();

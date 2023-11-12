@@ -23,11 +23,9 @@ public class Bullet : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-      Debug.Log("Entrou no collider");
         if (other.gameObject.tag == "Player")
         {
             MechWalk player = other.GetComponent<MechWalk>();
-            Debug.Log(player);
             if (player != null)
             {
                 player.TakeDamage(10);

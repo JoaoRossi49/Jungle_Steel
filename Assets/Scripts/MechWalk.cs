@@ -50,7 +50,6 @@ public class MechWalk : MonoBehaviour
 
     }
 
-    // Update is called once per frame
     void Update()
     {
         float forwardInput = Input.GetAxisRaw("Vertical");
@@ -81,12 +80,9 @@ public class MechWalk : MonoBehaviour
         anim.SetFloat(name:"jumping", jumping);
         anim.SetFloat(name:"Direction", strafeInput);
         anim.SetFloat(name:"Speed", forwardInput);
+        anim.SetFloat(name:"currentHealth", currentHealth);
 
-        if(Input.GetKeyDown(KeyCode.E)){
-            TakeDamage(10);
-        }
-
-        if(currentHealth == 0){
+        if(currentHealth = 0){
             Application.LoadLevel(Application.loadedLevel);
         }
 
@@ -100,12 +96,15 @@ public class MechWalk : MonoBehaviour
 
 
     }
+
     private void Passos(){
         passosAudioSource.PlayOneShot(passosAudioClip[0]);
     }
+
     private void Jet(){
         passosAudioSource.PlayOneShot(jetAudioClip[0]);
     }
+
     public void TakeDamage(int damage){
         currentHealth -= damage;
         healthBar.SetHealth(currentHealth);
